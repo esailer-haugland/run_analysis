@@ -1,0 +1,58 @@
+---
+title: "Code Book"
+author: "Ethan Sailer-Haugland"
+date: "2/16/2021"
+output: html_document
+---
+
+The ```run_analysis.R ``` script prepares data from a url download for the 5 steps laid out in the course project definition.  
+  1. **Download the dataset**
+    Dataset downloaded and exracted in local directory under ```UCI HAR Dataset```
+  
+  2. **Assign each data to variables**
+    +```features``` <- ```features.txt``` (561 rows, 2 columns)
+    features were taken from the acclerometer and gyroscope 3-axial raw signals tAccc-XYZ and tGyro-XYZ
+    +```activities``` <- ```activity_labels.txt``` (6 rows, 2 column)
+    activities that were done while measurements were made
+    +```subject_test``` <- ```test/subject_test.txt``` (2947 rows, 1 column)
+    test data of 9/30 volunteer test subjects
+    +```x_test```<- ```test/x_test.txt``` (2947 rows, 561 columns)
+    recorded features test data
+    +```y_test``` <- ```test/y_test.txt``` (2947 rows, 1 column)
+    test data of activies' code labels
+    +```subject_train``` <- ```test/subject_train.txt``` (7352 rows, 1 column)
+    contains train data of 21/30 volunteer subjects 
+    +```x_train``` <- ```test/X_train.txt``` (7352 rows, 561 columns)
+    recorded features train data
+    +```y_train``` <- ```test/Y_train.txt``` (7352 rows, 1 column)
+    contains train data of activities' code labels
+    
+  3. **Merge training and test data to creat one data set**
+    +```X``` (10299 rows, 561 columns)
+    created by mergeing ```x_train``` and ```x_test``` using ```r_bind()``` function
+    +```Y``` (10299 rows, 1 column)
+    created by merging ```y_train``` and ```y_test``` using ```rbind()``` function
+    +```Subject``` (10299 rows, 1 column)
+    created by merging ```subject_train``` and ```subject_test``` using ```rbind()``` function
+    +```Merged``` (10299 rows, 563 columns)
+    created by merging ```Subject```, ```Y```, and ```X``` using ```cbind()``` function
+    
+  4. **Extract only the measurements on the mean and sd for each measuremnt**
+    +```Tidy_Data``` (10299 rows, 88 columns)
+    created by subsetting ```Merged```, selecting only the columns ```subject```, ```code```, and measurements on the```mean``` and ```std``` for each measurement
+    
+  5. **Name activities in data set**
+    +Entire numbers in ```code``` column of ```Tidy_data``` were replaced with the corresponding activity taken from the second column of the ```activities``` variable
+    
+  6. **Assign variable names to data set**
+    +```code``` column in ```Tidy_data``` renamed to ```activities```
+    +All ```Acc``` in column's name changed to ```Accelerometer```
+    +All ```Gyro``` in column's name changed to ```Gyroscope```
+    +All ```BodyBody``` in column's name changed to ```Body```
+    +All ```Mag``` in column's name changed to ```Magnitude```
+    +All start ```f``` in column’s name replaced by ```Frequency```
+    +All start with character ```t```  in column’s name replaced by ```Time```
+  7. **From** ```tidy_data``` **creates a second data set witht the mean of each variable for each activity and subject**
+    +```data_aggr``` (180 rows, 88 columns)
+    created by grouping activity and subject then summarizing ```tidy_data``` taking the means for each variable for each activity and subject
+    +Export ```data_aggr``` into ```data_aggr.txt``` file
